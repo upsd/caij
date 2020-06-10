@@ -1,0 +1,16 @@
+# Crafting an Interpreter in Java
+
+## Grammar
+```
+expression → literal
+           | unary
+           | binary
+           | grouping ;
+
+literal    → NUMBER | STRING | "false" | "true" | "nil" ;
+grouping   → "(" expression ")" ;
+unary      → ( "-" | "!" ) expression ;
+binary     → expression operator expression ;
+operator   → "==" | "!=" | "<" | "<=" | ">" | ">="
+           | "+"  | "-"  | "*" | "/" ;
+```
