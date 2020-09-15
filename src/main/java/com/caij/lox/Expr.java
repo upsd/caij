@@ -1,4 +1,4 @@
-package com.cain.lox;
+package com.caij.lox;
 
 abstract class Expr {
   interface Visitor<R> {

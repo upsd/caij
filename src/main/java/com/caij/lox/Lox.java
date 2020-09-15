@@ -1,4 +1,4 @@
-package com.cain.lox;
+package com.caij.lox;
 
 import java.io.BufferedReader;
 import java.io.IOException;

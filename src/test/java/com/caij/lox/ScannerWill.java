@@ -1,10 +1,10 @@
-package com.cain.lox;
+package com.caij.lox;
 
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.cain.lox.TokenType.*;
+import static com.caij.lox.TokenType.*;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 

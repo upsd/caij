@@ -1,4 +1,4 @@
-package com.cain.lox;
+package com.caij.lox;
 
 public class AstPrinter implements Expr.Visitor<String> {
 

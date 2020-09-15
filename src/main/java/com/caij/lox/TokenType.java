@@ -1,4 +1,4 @@
-package com.cain.lox;
+package com.caij.lox;
 
 public enum TokenType {
     // Single-character tokens.
