@@ -25,6 +25,15 @@ public class ParserWill {
         ).producesExpression("null");
     }
 
+    @Test
+    public void parse_to_unary() {
+        new ExpressionVerifier(
+                new Token(TokenType.MINUS, "-", "-", 1),
+                new Token(TokenType.NUMBER, "1", 1, 2),
+                eofOn(3)
+        ).producesExpression("Operator: MINUS Right: 1");
+    }
+
     private class ExpressionVerifier {
 
         private final Token[] tokens;
@@ -66,7 +75,7 @@ public class ParserWill {
 
         @Override
         public String visitUnaryExpr(Expr.Unary expr) {
-            return "unary";
+            return "Operator: " + expr.operator.type + " Right: " + expr.right.accept(this);
         }
     }
 }
