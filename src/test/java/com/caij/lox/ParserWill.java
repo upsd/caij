@@ -32,6 +32,12 @@ public class ParserWill {
                 new Token(TokenType.NUMBER, "1", 1, 2),
                 eofOn(3)
         ).producesExpression("Operator: MINUS Right: 1");
+
+        new ExpressionVerifier(
+                new Token(TokenType.BANG, "!", "!", 1),
+                new Token(TokenType.TRUE, "true", true, 2),
+                eofOn(3)
+        ).producesExpression("Operator: BANG Right: true");
     }
 
     private class ExpressionVerifier {
