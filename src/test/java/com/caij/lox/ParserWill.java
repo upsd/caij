@@ -70,6 +70,13 @@ public class ParserWill {
                 new Token(TokenType.NUMBER, "2", 2, 3),
                 eofOn(4)
         ).producesExpression("(< 100 2)");
+
+        new ExpressionVerifier(
+                new Token(TokenType.TRUE, "true", true, 1),
+                new Token(TokenType.BANG_EQUAL, "!=", "!=", 2),
+                new Token(TokenType.FALSE, "false", false, 3),
+                eofOn(4)
+        ).producesExpression("(!= true false)");
     }
 
     @Test
@@ -105,6 +112,7 @@ public class ParserWill {
 
             final String visited = new AstPrinter().print(expression);
             assertThat(visited).isEqualTo(expectedExpression);
+            assertThat(visited).isNotNull();
         }
 
         ExpressionVerifier returnsNull() {
