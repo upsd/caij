@@ -52,6 +52,16 @@ public class ParserWill {
         ).producesExpression("(group (+ 1 2))");
     }
 
+    @Test
+    public void parse_to_binary() {
+        new ExpressionVerifier(
+                new Token(TokenType.NUMBER, "1", 1, 1),
+                new Token(TokenType.STAR, "*", "*", 2),
+                new Token(TokenType.NUMBER, "2", 2, 3),
+                eofOn(4)
+        ).producesExpression("(* 1 2)");
+    }
+
     private class ExpressionVerifier {
 
         private final Token[] tokens;
