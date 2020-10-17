@@ -14,17 +14,17 @@ public class ParserWill {
     public void parse_to_literal() {
         new ExpressionVerifier(
                 new Token(TokenType.TRUE, "true", true, 1),
-                eofOn(2)
+                eofOn(1)
         ).producesExpression("true");
 
         new ExpressionVerifier(
                 new Token(TokenType.FALSE, "false", false, 1),
-                eofOn(2)
+                eofOn(1)
         ).producesExpression("false");
 
         new ExpressionVerifier(
                 new Token(TokenType.NIL, "nil", null, 1),
-                eofOn(2)
+                eofOn(1)
         ).producesExpression("nil");
     }
 
@@ -32,14 +32,14 @@ public class ParserWill {
     public void parse_to_unary() {
         new ExpressionVerifier(
                 new Token(TokenType.MINUS, "-", "-", 1),
-                new Token(TokenType.NUMBER, "1", 1, 2),
-                eofOn(3)
+                new Token(TokenType.NUMBER, "1", 1, 1),
+                eofOn(1)
         ).producesExpression("(- 1)");
 
         new ExpressionVerifier(
                 new Token(TokenType.BANG, "!", "!", 1),
-                new Token(TokenType.TRUE, "true", true, 2),
-                eofOn(3)
+                new Token(TokenType.TRUE, "true", true, 1),
+                eofOn(1)
         ).producesExpression("(! true)");
     }
 
@@ -47,11 +47,11 @@ public class ParserWill {
     public void parse_to_grouping() {
         new ExpressionVerifier(
                 new Token(TokenType.LEFT_PAREN, "(", "(", 1),
-                new Token(TokenType.NUMBER, "1", 1, 2),
-                new Token(TokenType.PLUS, "+", "+", 3),
-                new Token(TokenType.NUMBER, "2", 2, 4),
-                new Token(TokenType.RIGHT_PAREN, ")", ")", 5),
-                eofOn(6)
+                new Token(TokenType.NUMBER, "1", 1, 1),
+                new Token(TokenType.PLUS, "+", "+", 1),
+                new Token(TokenType.NUMBER, "2", 2, 1),
+                new Token(TokenType.RIGHT_PAREN, ")", ")", 1),
+                eofOn(1)
         ).producesExpression("(group (+ 1 2))");
     }
 
@@ -59,23 +59,23 @@ public class ParserWill {
     public void parse_to_binary() {
         new ExpressionVerifier(
                 new Token(TokenType.NUMBER, "1", 1, 1),
-                new Token(TokenType.STAR, "*", "*", 2),
-                new Token(TokenType.NUMBER, "2", 2, 3),
-                eofOn(4)
+                new Token(TokenType.STAR, "*", "*", 1),
+                new Token(TokenType.NUMBER, "2", 2, 1),
+                eofOn(1)
         ).producesExpression("(* 1 2)");
 
         new ExpressionVerifier(
                 new Token(TokenType.NUMBER, "100", 100, 1),
-                new Token(TokenType.LESS, "<", "<", 2),
-                new Token(TokenType.NUMBER, "2", 2, 3),
-                eofOn(4)
+                new Token(TokenType.LESS, "<", "<", 1),
+                new Token(TokenType.NUMBER, "2", 2, 1),
+                eofOn(1)
         ).producesExpression("(< 100 2)");
 
         new ExpressionVerifier(
                 new Token(TokenType.TRUE, "true", true, 1),
-                new Token(TokenType.BANG_EQUAL, "!=", "!=", 2),
-                new Token(TokenType.FALSE, "false", false, 3),
-                eofOn(4)
+                new Token(TokenType.BANG_EQUAL, "!=", "!=", 1),
+                new Token(TokenType.FALSE, "false", false, 1),
+                eofOn(1)
         ).producesExpression("(!= true false)");
     }
 
@@ -87,10 +87,10 @@ public class ParserWill {
 
         new ExpressionVerifier(
                 new Token(TokenType.LEFT_PAREN, "(", "(", 1),
-                new Token(TokenType.NUMBER, "1", "1", 2),
-                eofOn(3))
+                new Token(TokenType.NUMBER, "1", "1", 1),
+                eofOn(1))
                 .returnsNull()
-                .reportedTheFollowingError("[line 3] Error at end: Expect ')' after expression.\n");
+                .reportedTheFollowingError("[line 1] Error at end: Expect ')' after expression.\n");
     }
 
     private class ExpressionVerifier {
