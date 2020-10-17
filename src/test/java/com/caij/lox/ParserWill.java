@@ -60,6 +60,13 @@ public class ParserWill {
                 new Token(TokenType.NUMBER, "2", 2, 3),
                 eofOn(4)
         ).producesExpression("(* 1 2)");
+
+        new ExpressionVerifier(
+                new Token(TokenType.NUMBER, "100", 100, 1),
+                new Token(TokenType.LESS, "<", "<", 2),
+                new Token(TokenType.NUMBER, "2", 2, 3),
+                eofOn(4)
+        ).producesExpression("(< 100 2)");
     }
 
     private class ExpressionVerifier {
