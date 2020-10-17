@@ -83,14 +83,14 @@ public class ParserWill {
     public void return_null_and_print_error_if_parse_error_encountered() {
         new ExpressionVerifier(eofOn(1))
                 .returnsNull()
-                .reportedTheFollowingError("[line 1] Error at end: Expect expression.\n");
+                .reportsTheFollowingError("[line 1] Error at end: Expect expression.\n");
 
         new ExpressionVerifier(
                 new Token(TokenType.LEFT_PAREN, "(", "(", 1),
                 new Token(TokenType.NUMBER, "1", "1", 1),
                 eofOn(1))
                 .returnsNull()
-                .reportedTheFollowingError("[line 1] Error at end: Expect ')' after expression.\n");
+                .reportsTheFollowingError("[line 1] Error at end: Expect ')' after expression.\n");
     }
 
     private class ExpressionVerifier {
@@ -120,7 +120,7 @@ public class ParserWill {
             return this;
         }
 
-        void reportedTheFollowingError(String expectedConsoleOutput) {
+        void reportsTheFollowingError(String expectedConsoleOutput) {
             assertThat(redirectedConsoleOutput.toString()).isEqualTo(expectedConsoleOutput);
             resetBackToConsole();
         }
