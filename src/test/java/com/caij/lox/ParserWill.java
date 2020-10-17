@@ -22,7 +22,7 @@ public class ParserWill {
         new ExpressionVerifier(
                 new Token(TokenType.NIL, "nil", null, 1),
                 eofOn(2)
-        ).producesExpression("null");
+        ).producesExpression("nil");
     }
 
     @Test
@@ -31,13 +31,25 @@ public class ParserWill {
                 new Token(TokenType.MINUS, "-", "-", 1),
                 new Token(TokenType.NUMBER, "1", 1, 2),
                 eofOn(3)
-        ).producesExpression("Operator: MINUS Right: 1");
+        ).producesExpression("(- 1)");
 
         new ExpressionVerifier(
                 new Token(TokenType.BANG, "!", "!", 1),
                 new Token(TokenType.TRUE, "true", true, 2),
                 eofOn(3)
-        ).producesExpression("Operator: BANG Right: true");
+        ).producesExpression("(! true)");
+    }
+
+    @Test
+    public void parse_to_grouping() {
+        new ExpressionVerifier(
+                new Token(TokenType.LEFT_PAREN, "(", "(", 1),
+                new Token(TokenType.NUMBER, "1", 1, 2),
+                new Token(TokenType.PLUS, "+", "+", 3),
+                new Token(TokenType.NUMBER, "2", 2, 4),
+                new Token(TokenType.RIGHT_PAREN, ")", ")", 5),
+                eofOn(6)
+        ).producesExpression("(group (+ 1 2))");
     }
 
     private class ExpressionVerifier {
@@ -51,37 +63,12 @@ public class ParserWill {
         void producesExpression(String expectedExpression) {
             final Expr expression = new Parser(asList(tokens)).parse();
 
-            final String visited = expression.accept(new TestVisitor());
+            final String visited = new AstPrinter().print(expression);
             assertThat(visited).isEqualTo(expectedExpression);
         }
     }
 
     private Token eofOn(int line) {
         return new Token(TokenType.EOF, "", null, line);
-    }
-
-    private class TestVisitor implements Expr.Visitor<String> {
-
-        @Override
-        public String visitBinaryExpr(Expr.Binary expr) {
-            return "bob";
-        }
-
-        @Override
-        public String visitGroupingExpr(Expr.Grouping expr) {
-            return "grouping";
-        }
-
-        @Override
-        public String visitLiteralExpr(Expr.Literal expr) {
-            if (expr.value == null) return "null";
-
-            return expr.value.toString();
-        }
-
-        @Override
-        public String visitUnaryExpr(Expr.Unary expr) {
-            return "Operator: " + expr.operator.type + " Right: " + expr.right.accept(this);
-        }
     }
 }
