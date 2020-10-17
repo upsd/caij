@@ -3,6 +3,7 @@ package com.caij.lox;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ParserWill {
@@ -67,6 +68,13 @@ public class ParserWill {
                 new Token(TokenType.NUMBER, "2", 2, 3),
                 eofOn(4)
         ).producesExpression("(< 100 2)");
+    }
+
+    @Test
+    public void return_null_if_parse_error_encountered() {
+        final Expr expression = new Parser(singletonList(eofOn(1))).parse();
+
+        assertThat(expression).isNull();
     }
 
     private class ExpressionVerifier {
