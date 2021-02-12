@@ -4,6 +4,9 @@ import java.util.List;
 
 import static com.caij.lox.TokenType.*;
 
+/**
+ * Responsibility: recognises expressions given a set of tokens
+ * */
 public class Parser {
 
     private static class ParseError extends RuntimeException {}

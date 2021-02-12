@@ -7,6 +7,9 @@ import java.util.Map;
 
 import static com.caij.lox.TokenType.*;
 
+/**
+ * Responsibility: recognise syntax of language from input
+ * */
 public class Scanner {
 
     private final String source;
