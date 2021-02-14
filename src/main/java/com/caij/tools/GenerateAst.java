@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class GenerateAst {
 
@@ -17,11 +18,15 @@ public class GenerateAst {
 
         String outputDir = args[0];
 
-        defineAst(outputDir, "Expr", Arrays.asList(
+        defineAst(outputDir, "Expr", asList(
                 "Binary : Expr left, Token operator, Expr right",
                 "Grouping : Expr expression",
                 "Literal : Object value",
                 "Unary : Token operator, Expr right"
+        ));
+        defineAst(outputDir, "Stmt", asList(
+                "Expression : Expr expression",
+                "Print : Expr expression"
         ));
     }
 
@@ -29,10 +34,10 @@ public class GenerateAst {
         String path = outputDir + File.separator + baseName + ".java";
         PrintWriter writer = new PrintWriter(path, "UTF-8");
 
-        writer.println("package com.cain.lox;");
+        writer.println("package com.caij.lox;");
         writer.println();
         writer.println("import java.util.List;");
-        writer.println("import com.cain.lox.Token;");
+        writer.println("import com.caij.lox.Token;");
         writer.println();
         writer.println("abstract class " + baseName + " {");
 
