@@ -36,6 +36,15 @@ public class Parser {
         while (match(BANG_EQUAL, EQUAL_EQUAL)) {
             Token operator = previous();
             Expr right = comparison();
+            // note how expression will have a different value each iteration, and it is building the tree (or chain)
+            // of binary expressions
+            // take the following: true != false != true
+            // resulting expression will be:
+            // (a) left = binary(true != false)
+            // (b) operator = !=
+            // (c) right = true
+            // in effect, it is a binary expression, containing a binary expression (a), a token (b), and a literal (c)
+
             expr = new Expr.Binary(expr, operator, right);
         }
         return expr;
@@ -68,6 +77,7 @@ public class Parser {
     private Expr factor() {
         Expr expr = unary();
 
+        // divide or multiply
         while (match(SLASH, STAR)) {
             Token operator = previous();
             Expr right = unary();
@@ -92,13 +102,16 @@ public class Parser {
         if (match(TRUE)) return new Expr.Literal(true);
         if (match(NIL)) return new Expr.Literal(null);
 
+        // is a literal
         if (match(NUMBER, STRING)) {
             return new Expr.Literal(previous().literal);
         }
 
+        // start of an expression
         if (match(LEFT_PAREN)) {
             final Expr expression = expression();
             consume(RIGHT_PAREN, "Expect ')' after expression.");
+            // return expression between parentheses
             return new Expr.Grouping(expression);
         }
 

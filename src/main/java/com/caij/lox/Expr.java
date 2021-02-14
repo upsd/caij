@@ -7,6 +7,12 @@ abstract class Expr {
     R visitLiteralExpr(Literal expr);
     R visitUnaryExpr(Unary expr);
   }
+
+  /**
+   * [expression] [operator] [expression]
+   * Example: 1 + 1
+   * Example: (1 * 2) + (2 * 3)
+   */
   static class Binary extends Expr {
     Binary(Expr left, Token operator, Expr right) {
       this.left = left;
@@ -23,6 +29,12 @@ abstract class Expr {
     final Token operator;
     final Expr right;
   }
+
+  /**
+   * [expression]
+   * Example: 1 + 1
+   * Example: false
+   */
   static class Grouping extends Expr {
     Grouping(Expr expression) {
       this.expression = expression;
@@ -35,6 +47,12 @@ abstract class Expr {
 
     final Expr expression;
   }
+
+  /**
+   * [value]
+   * Example: 3
+   * Example: "hello"
+   */
   static class Literal extends Expr {
     Literal(Object value) {
       this.value = value;
@@ -47,6 +65,12 @@ abstract class Expr {
 
     final Object value;
   }
+
+  /**
+  * [operator] [expression]
+  * Example: !true
+  * Example: -4
+  * */
   static class Unary extends Expr {
     Unary(Token operator, Expr right) {
       this.operator = operator;
