@@ -110,7 +110,9 @@ public class Scanner {
 
         String text = source.substring(start, current);
 
+        // is the text a keyword?
         TokenType type = keywords.get(text);
+        // if not, it is an identifier
         if (type == null) type = IDENTIFIER;
 
         addToken(type);
@@ -129,6 +131,7 @@ public class Scanner {
     private void number() {
         while (isDigit(peek())) advance();
 
+        // post-decimal numbers
         if (peek() == '.' && isDigit(peekNext())) {
             advance();
 
@@ -149,10 +152,12 @@ public class Scanner {
 
     private void string() {
         while (peek() != '"' && notAtEnd()) {
+            // multi-line strings allowed
             if (peek() == '\n') line++;
             advance();
         }
 
+        // if we have not found a closing quote
         if (isAtEnd()) {
             Lox.error(line, "Unterminated string.");
             return;
@@ -160,6 +165,7 @@ public class Scanner {
 
         advance();
 
+        // strip enclosing quotes ["]mystring["]
         String value = source.substring(start + 1, current - 1);
         addToken(STRING, value);
     }
@@ -174,6 +180,7 @@ public class Scanner {
             return;
         }
 
+        // skip past closing two characters of multi-line comment
         advance();
         advance();
     }
@@ -193,6 +200,7 @@ public class Scanner {
 
     private boolean match(char expected) {
         if (isAtEnd()) return false;
+        // if next character matches
         if (source.charAt(current) != expected) return false;
 
         current++;
@@ -209,7 +217,11 @@ public class Scanner {
     }
 
     private char advance() {
+        // current now points to the next character
         current++;
+        // given: hello
+        // current = h[e]llo
+        // returned = [h]ello
         return source.charAt(current - 1);
     }
 }
