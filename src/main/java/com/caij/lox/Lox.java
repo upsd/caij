@@ -48,12 +48,11 @@ public class Lox {
         final Scanner scanner = new Scanner(source);
         final List<Token> tokens = scanner.scanTokens();
         final Parser parser = new Parser(tokens);
-        final Expr expression = parser.parse();
+        final List<Stmt> statements = parser.parse();
 
         if (hadError) return;
 
-//        System.out.println(new AstPrinter().print(expression));
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
     }
 
     static void error(int line, String message) {
