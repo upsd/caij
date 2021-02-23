@@ -29,7 +29,7 @@ public class Parser {
     }
 
     private Expr expression() {
-        return equality();
+        return assignment();
     }
 
     private Stmt declaration() {
@@ -65,6 +65,23 @@ public class Parser {
         final Expr expr = expression();
         consume(SEMICOLON, "Expect ';' after expression.");
         return new Stmt.Expression(expr);
+    }
+
+    private Expr assignment() {
+        final Expr expr = equality();
+
+        if (match(EQUAL)) {
+            final Token equals = previous();
+            final Expr value = assignment();
+
+            if (expr instanceof Expr.Variable) {
+                final Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals, "Invalid assignment target.");
+        }
+        return expr;
     }
 
     private Stmt printStatement() {
