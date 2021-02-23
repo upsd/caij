@@ -66,10 +66,6 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
     }
 
-    private void execute(Stmt statement) {
-        statement.accept(this);
-    }
-
     private String stringify(Object value) {
         if (value == null) return "nil";
 
@@ -148,5 +144,9 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private Object evaluate(Expr expr) {
         return expr.accept(this);
+    }
+
+    private void execute(Stmt statement) {
+        statement.accept(this);
     }
 }
