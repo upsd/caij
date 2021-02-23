@@ -6,6 +6,8 @@ program        → declaration* EOF ;
 
 declaration    → varDecl
                | statement ;
+
+varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
                
 statement      → exprStmt
                | printStmt ;
@@ -20,8 +22,10 @@ term           → factor ( ( "-" | "+" ) factor )* ;
 factor         → unary ( ( "/" | "*" ) unary )* ;
 unary          → ( "!" | "-" ) unary
                | primary ;
-primary        → NUMBER | STRING | "true" | "false" | "nil"
-               | "(" expression ")" ;
+primary        → "true" | "false" | "nil"
+               | NUMBER | STRING
+               | "(" expression ")"
+               | IDENTIFIER ;
 ```
 
 
