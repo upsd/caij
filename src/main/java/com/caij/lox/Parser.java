@@ -7,7 +7,7 @@ import static com.caij.lox.TokenType.*;
 
 /**
  * Responsibility: recognises expressions given a set of tokens
- * */
+ */
 public class Parser {
 
     private static class ParseError extends RuntimeException {}
@@ -15,10 +15,18 @@ public class Parser {
     private final List<Token> tokens;
     private int current = 0;
 
+    /**
+     * Construct a Parser
+     * @param tokens raw tokens to parse
+     */
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
 
+    /**
+     * Parse tokens, looking for statements, built using rules of grammar
+     * @return statements created from tokens
+     */
     List<Stmt> parse() {
         final List<Stmt> statements = new ArrayList<>();
         while (!isAtEnd()) {
