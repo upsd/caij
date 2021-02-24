@@ -1,0 +1,9 @@
+var a = 1 + 1;
+
+{
+    var b = 100;
+    print(b);
+}
+
+print (a);
+
