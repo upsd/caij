@@ -9,7 +9,7 @@ import static com.caij.lox.TokenType.*;
 
 /**
  * Responsibility: recognise syntax of language from input
- * */
+ */
 public class Scanner {
 
     private final String source;
@@ -40,10 +40,18 @@ public class Scanner {
     private int current = 0;
     private int line = 1;
 
+    /**
+     * Construct a Scanner using
+     * @param source raw source code
+     */
     public Scanner(String source) {
         this.source = source;
     }
 
+    /**
+     * Scans source code for all valid tokens of language
+     * @return list of tokens found in source code
+     */
     public List<Token> scanTokens() {
         while (notAtEnd()) {
             start = current;
