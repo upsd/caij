@@ -38,7 +38,7 @@ public class LoxWill {
     }
 
     @Test
-    public void interpret_basic_arithmetic() throws IOException {
+    public void test_scenarios() throws IOException {
         final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
         if (scenariosFound != null) {
