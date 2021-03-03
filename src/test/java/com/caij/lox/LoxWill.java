@@ -7,6 +7,9 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,10 +38,13 @@ public class LoxWill {
 
     @Test
     public void interpret_basic_arithmetic() throws IOException {
-        final String pathToTestFile = Paths.get("src","test","resources", "file.lox").toString();
+        final String pathToTestFile = Paths.get("src","test","resources", "scenarios/basic_arithmetic/input.lox").toString();
+        final Path pathToExpectedOutputFile = Paths.get("src","test","resources", "scenarios/basic_arithmetic/output");
+        final byte[] bytes = Files.readAllBytes(pathToExpectedOutputFile);
+        final String expectedOutput = new String(bytes, Charset.defaultCharset());
 
         Lox.main(new String[]{pathToTestFile});
 
-        assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo("100\n2");
+        assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(expectedOutput);
     }
 }
