@@ -5,12 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,13 +39,27 @@ public class LoxWill {
 
     @Test
     public void interpret_basic_arithmetic() throws IOException {
-        final String pathToTestFile = Paths.get("src","test","resources", "scenarios/basic_arithmetic/input.lox").toString();
-        final Path pathToExpectedOutputFile = Paths.get("src","test","resources", "scenarios/basic_arithmetic/output");
-        final byte[] bytes = Files.readAllBytes(pathToExpectedOutputFile);
-        final String expectedOutput = new String(bytes, Charset.defaultCharset());
+        final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
+        final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
+        if (scenariosFound != null) {
+            for (File scenario : scenariosFound) {
+                final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
+                final File expected = firstFileMatching(scenario, "output").orElseThrow(() -> new RuntimeException("No expected output found."));
 
-        Lox.main(new String[]{pathToTestFile});
+                final byte[] bytes = Files.readAllBytes(expected.toPath());
+                final String expectedOutput = new String(bytes, Charset.defaultCharset());
 
-        assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(expectedOutput);
+                Lox.main(new String[]{input.toPath().toString()});
+
+                assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(expectedOutput);
+            }
+        }
+    }
+
+    private Optional<File> firstFileMatching(File directory, String fileNameToMatch) {
+        final File[] files = directory.listFiles(f -> fileNameToMatch.equals(f.getName()));
+        return files != null
+                ? Optional.ofNullable(files[0])
+                : Optional.empty();
     }
 }
