@@ -49,8 +49,7 @@ public class LoxWill {
                 final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
                 final File expected = firstFileMatching(scenario, "output").orElseThrow(() -> new RuntimeException("No expected output found."));
 
-                final byte[] bytes = Files.readAllBytes(expected.toPath());
-                final String expectedOutput = new String(bytes, Charset.defaultCharset());
+                final String expectedOutput = contentsOf(expected);
 
                 Lox.main(new String[]{input.toPath().toString()});
 
@@ -59,6 +58,11 @@ public class LoxWill {
                 passingTests.add(scenario.getName());
             }
         }
+    }
+
+    private String contentsOf(File expected) throws IOException {
+        final byte[] bytes = Files.readAllBytes(expected.toPath());
+        return new String(bytes, Charset.defaultCharset());
     }
 
     private Optional<File> firstFileMatching(File directory, String fileNameToMatch) {
