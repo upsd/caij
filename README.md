@@ -1,6 +1,14 @@
 # Crafting an Interpreter in Java
 
 ## Grammar
+
+Key:
+```
+? = optional
+| = OR
+* = can appear 0 or abritary amount of times
+```
+
 ```
 program        → declaration* EOF ;
 
