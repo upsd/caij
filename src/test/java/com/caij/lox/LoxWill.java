@@ -22,6 +22,7 @@ public class LoxWill {
     private ByteArrayOutputStream redirectedConsoleOutput;
     private static PrintStream oldConsole;
     private static List<String> passingTests;
+    private static int scenariosToRun;
 
     @BeforeAll
     static void setUp() {
@@ -35,8 +36,10 @@ public class LoxWill {
         flushStdOut();
         System.setOut(oldConsole);
 
-        System.out.println("All test have been run.");
-        passingTests.forEach(test -> System.out.println(" - " + test + " has passed."));
+        if (!passingTests.isEmpty()) {
+            System.out.println("All tests have been run (" + scenariosToRun + "):");
+            passingTests.forEach(test -> System.out.println(" - " + test + " has passed."));
+        }
     }
 
     @Test
@@ -44,6 +47,7 @@ public class LoxWill {
         final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
         if (scenariosFound != null) {
+            scenariosToRun = scenariosFound.length;
             for (File scenario : scenariosFound) {
                 redirectStdOut();
                 final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
