@@ -46,12 +46,7 @@ public class LoxWill {
         final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
         if (scenariosFound != null) {
-            final List<Scenario> scenariosToTest = new ArrayList<>();
-            for (File scenario : scenariosFound) {
-                final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
-                final File expected = firstFileMatching(scenario, "output").orElseThrow(() -> new RuntimeException("No expected output found."));
-                scenariosToTest.add(Given.input(input).outputWillBe(contentsOf(expected)).named(scenario.getName()));
-            }
+            final List<Scenario> scenariosToTest = getScenarios(scenariosFound);
 
             for (Scenario scenario : scenariosToTest) {
                 redirectStdOut();
@@ -64,6 +59,16 @@ public class LoxWill {
             }
 
         }
+    }
+
+    private List<Scenario> getScenarios(File[] scenariosFound) throws IOException {
+        final List<Scenario> scenariosToTest = new ArrayList<>();
+        for (File scenario : scenariosFound) {
+            final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
+            final File expected = firstFileMatching(scenario, "output").orElseThrow(() -> new RuntimeException("No expected output found."));
+            scenariosToTest.add(Given.input(input).outputWillBe(contentsOf(expected)).named(scenario.getName()));
+        }
+        return scenariosToTest;
     }
 
     private String contentsOf(File expected) throws IOException {
