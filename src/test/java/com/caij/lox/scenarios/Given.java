@@ -1,4 +1,4 @@
-package com.caij.lox;
+package com.caij.lox.scenarios;
 
 import java.io.File;
 

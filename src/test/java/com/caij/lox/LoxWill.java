@@ -1,5 +1,7 @@
 package com.caij.lox;
 
+import com.caij.lox.scenarios.Given;
+import com.caij.lox.scenarios.Scenario;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
