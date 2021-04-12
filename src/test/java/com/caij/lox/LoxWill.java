@@ -46,7 +46,7 @@ public class LoxWill {
         final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
         if (scenariosFound != null) {
-            testAll(getScenarios(scenariosFound));
+            testAll(scenariosFrom(scenariosFound));
         }
     }
 
@@ -62,7 +62,7 @@ public class LoxWill {
         }
     }
 
-    private List<Scenario> getScenarios(File[] scenariosFound) throws IOException {
+    private List<Scenario> scenariosFrom(File[] scenariosFound) throws IOException {
         final List<Scenario> scenariosToTest = new ArrayList<>();
         for (File scenario : scenariosFound) {
             final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
