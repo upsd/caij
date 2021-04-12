@@ -46,18 +46,19 @@ public class LoxWill {
         final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
         if (scenariosFound != null) {
-            final List<Scenario> scenariosToTest = getScenarios(scenariosFound);
+            testAll(getScenarios(scenariosFound));
+        }
+    }
 
-            for (Scenario scenario : scenariosToTest) {
-                redirectStdOut();
+    private void testAll(List<Scenario> scenariosToTest) throws IOException {
+        for (Scenario scenario : scenariosToTest) {
+            redirectStdOut();
 
-                Lox.main(new String[]{scenario.getInput().toPath().toString()});
+            Lox.main(new String[]{scenario.getInput().toPath().toString()});
 
-                assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(scenario.getExpectedOutput());
-                flushStdOut();
-                passingScenarios.add(scenario);
-            }
-
+            assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(scenario.getExpectedOutput());
+            flushStdOut();
+            passingScenarios.add(scenario);
         }
     }
 
