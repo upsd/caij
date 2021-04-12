@@ -43,10 +43,10 @@ public class LoxWill {
 
     @Test
     void test_scenarios() throws IOException {
-        final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
-        final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
-        if (scenariosFound != null) {
-            testAll(scenariosFrom(scenariosFound));
+        final File whereScenariosShouldBe = Paths.get("src", "test", "resources", "scenarios").toFile();
+        final File[] allScenarioFolders = whereScenariosShouldBe.listFiles(File::isDirectory);
+        if (allScenarioFolders != null) {
+            testAll(scenariosFrom(allScenarioFolders));
         }
     }
 
