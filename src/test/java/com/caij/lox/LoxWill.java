@@ -21,12 +21,11 @@ public class LoxWill {
 
     private ByteArrayOutputStream redirectedConsoleOutput;
     private static PrintStream oldConsole;
-    private static List<String> passingTests;
-    private static int scenariosToRun;
+    private static List<Scenario> passingScenarios;
 
     @BeforeAll
     static void setUp() {
-        passingTests = new ArrayList<>();
+        passingScenarios = new ArrayList<>();
         oldConsole = System.out;
     }
 
@@ -36,9 +35,9 @@ public class LoxWill {
         flushStdOut();
         System.setOut(oldConsole);
 
-        if (!passingTests.isEmpty()) {
-            System.out.println("All tests have been run (" + scenariosToRun + "):");
-            passingTests.forEach(test -> System.out.println(" - " + test + " has passed."));
+        if (!passingScenarios.isEmpty()) {
+            System.out.println("All tests have been run (" + passingScenarios.size() + "):");
+            passingScenarios.forEach(scenario -> System.out.println(" - " + scenario.getTitle() + " has passed."));
         }
     }
 
@@ -47,20 +46,23 @@ public class LoxWill {
         final File scenarios = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] scenariosFound = scenarios.listFiles(File::isDirectory);
         if (scenariosFound != null) {
-            scenariosToRun = scenariosFound.length;
+            final List<Scenario> scenariosToTest = new ArrayList<>();
             for (File scenario : scenariosFound) {
-                redirectStdOut();
                 final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
                 final File expected = firstFileMatching(scenario, "output").orElseThrow(() -> new RuntimeException("No expected output found."));
-
-                final String expectedOutput = contentsOf(expected);
-
-                Lox.main(new String[]{input.toPath().toString()});
-
-                assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(expectedOutput);
-                flushStdOut();
-                passingTests.add(scenario.getName());
+                scenariosToTest.add(Given.input(input).outputWillBe(contentsOf(expected)).named(scenario.getName()));
             }
+
+            for (Scenario scenario : scenariosToTest) {
+                redirectStdOut();
+
+                Lox.main(new String[]{scenario.getInput().toPath().toString()});
+
+                assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(scenario.getExpectedOutput());
+                flushStdOut();
+                passingScenarios.add(scenario);
+            }
+
         }
     }
 
