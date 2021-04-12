@@ -1,6 +1,7 @@
 package com.caij.lox;
 
 import java.util.List;
+import com.caij.lox.Token;
 
 abstract class Stmt {
   interface Visitor<R> {
