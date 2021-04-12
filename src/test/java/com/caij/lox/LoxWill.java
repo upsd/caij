@@ -62,9 +62,9 @@ public class LoxWill {
         }
     }
 
-    private List<Scenario> scenariosFrom(File[] scenariosFound) throws IOException {
+    private List<Scenario> scenariosFrom(File[] scenarioFolders) throws IOException {
         final List<Scenario> scenariosToTest = new ArrayList<>();
-        for (File scenario : scenariosFound) {
+        for (File scenario : scenarioFolders) {
             final File input = firstFileMatching(scenario, "input.lox").orElseThrow(() -> new RuntimeException("No input found"));
             final File expected = firstFileMatching(scenario, "output").orElseThrow(() -> new RuntimeException("No expected output found."));
             scenariosToTest.add(Given.input(input).outputWillBe(contentsOf(expected)).named(scenario.getName()));
