@@ -22,11 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LoxWill {
 
     private ByteArrayOutputStream redirectedConsoleOutput;
+    private static int numberOfScenarios;
     private static PrintStream oldConsole;
     private static List<Scenario> passingScenarios;
 
     @BeforeAll
     static void setUp() {
+        numberOfScenarios = 0;
         passingScenarios = new ArrayList<>();
         oldConsole = System.out;
     }
@@ -38,7 +40,7 @@ public class LoxWill {
         System.setOut(oldConsole);
 
         if (!passingScenarios.isEmpty()) {
-            System.out.println("All tests have been run (" + passingScenarios.size() + "):");
+            System.out.println(passingScenarios.size() + " / " + numberOfScenarios + " have run successfully:");
             passingScenarios.forEach(scenario -> System.out.println(" - " + scenario.getTitle() + " has passed."));
         }
     }
@@ -48,7 +50,9 @@ public class LoxWill {
         final File whereScenariosShouldBe = Paths.get("src", "test", "resources", "scenarios").toFile();
         final File[] allScenarioFolders = whereScenariosShouldBe.listFiles(File::isDirectory);
         if (allScenarioFolders != null) {
-            testAll(scenariosFrom(allScenarioFolders));
+            final List<Scenario> scenariosToTest = scenariosFrom(allScenarioFolders);
+            numberOfScenarios = scenariosToTest.size();
+            testAll(scenariosToTest);
         }
     }
 
@@ -58,7 +62,10 @@ public class LoxWill {
 
             Lox.main(new String[]{scenario.getInput().toPath().toString()});
 
-            assertThat(redirectedConsoleOutput.toString().trim()).isEqualTo(scenario.getExpectedOutput());
+            assertThat(redirectedConsoleOutput.toString().trim())
+                    .as(scenario.getTitle() + " has failed.")
+                    .isEqualTo(scenario.getExpectedOutput());
+
             flushStdOut();
             passingScenarios.add(scenario);
         }
